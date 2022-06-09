@@ -1,5 +1,5 @@
 {
-  "name": "standard-api-connector",
+  "name": "standard-json-api-connectors",
   "version": "0.1.0",
   "description": "Standardized HTTP JSON requests with standardized errors.",
   "type": "module",
