@@ -1,7 +1,7 @@
 {
   "name": "standard-api-connector",
   "version": "0.1.0",
-  "description": "",
+  "description": "Standardized HTTP JSON requests with standardized errors.",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -31,12 +31,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gyulanemeth/json-api-connector.git"
+    "url": "git+https://github.com/gyulanemeth/standard-json-api-connectors.git"
   },
+  "keywords": [
+    "API",
+    "JSON",
+    "HTTP",
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "connector"
+  ],
   "bugs": {
-    "url": "https://github.com/gyulanemeth/json-api-connector/issues"
+    "url": "https://github.com/gyulanemeth/standard-json-api-connectors/issues"
   },
-  "homepage": "https://github.com/gyulanemeth/json-api-connector#readme",
+  "homepage": "https://github.com/gyulanemeth/standard-json-api-connectors#readme",
   "dependencies": {
     "qs": "^6.10.5",
     "standard-api-errors": "^0.2.0"
