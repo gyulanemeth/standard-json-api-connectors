@@ -47,10 +47,10 @@ const generateAdditionalHeaders = (params) => {
 }
 
 const get = createGetConnector(fetch, apiUrl, generateRoute, generateAdditionalHeaders)
-const post = createGetConnector(fetch, apiUrl, generateRoute, generateAdditionalHeaders)
-const put = createGetConnector(fetch, apiUrl, generateRoute, generateAdditionalHeaders)
-const patch = createGetConnector(fetch, apiUrl, generateRoute, generateAdditionalHeaders)
-const del = createGetConnector(fetch, apiUrl, generateRoute, generateAdditionalHeaders)
+const post = createPostConnector(fetch, apiUrl, generateRoute, generateAdditionalHeaders)
+const put = createPutConnector(fetch, apiUrl, generateRoute, generateAdditionalHeaders)
+const patch = createPatchConnector(fetch, apiUrl, generateRoute, generateAdditionalHeaders)
+const del = createDeleteConnector(fetch, apiUrl, generateRoute, generateAdditionalHeaders)
 
 // after this, you can invoke the returned functions
 ```
