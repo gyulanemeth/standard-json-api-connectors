@@ -1,9 +1,9 @@
 {
   "name": "standard-json-api-connectors",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Standardized HTTP JSON requests with standardized errors.",
   "type": "module",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "lint": "npx standard",
     "lint-fix": "npx standard --fix",
