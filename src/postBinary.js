@@ -20,11 +20,3 @@ export default (fetch, apiUrl, fieldName, generateRoute, generateHeaderFields = 
   await throwOnError(response)
   return await createResponseObject(response)
 }
-/*
- const requestOptions = {
-      method: 'POST',
-      headers: generateAdditionalHeaders(),
-      body: formData
-    }
-    let res = await fetch(url, requestOptions)
-*/
