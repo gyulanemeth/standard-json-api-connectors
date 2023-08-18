@@ -32,6 +32,14 @@ describe('patch', () => {
     expect(response).toEqual({ mocked: 'response' })
   })
 
+  test('cors error', async () => {
+    const fetch = jest.fn(() => { throw new Error('fetch error') })
+
+    const patch = createPatchConnector(fetch, 'https://test.com', (params) => `/v1/something/${params.somethingId}/else/`)
+
+    await expect(patch({ somethingId: 3 }, { example: 'body' })).rejects.toThrowError('Failed to fetch: CORS error. Please contact support.')
+  })
+
   test('with extra headers', async () => {
     const fetch = jest.fn()
     fetch.mockResolvedValue({ ok: true, headers: { get: () => 'application/json' }, json: () => Promise.resolve({ result: { mocked: 'response' } }) })
