@@ -7,13 +7,14 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const testPic = fs.readFileSync(path.join(__dirname, '..', 'testPics', 'test.png'))
-const formData = new FormData()
-formData.append('image', testPic)
 
 describe('postBinary', () => {
   test('without extra headers', async () => {
     const fetch = jest.fn()
     fetch.mockResolvedValue({ ok: true, headers: { get: () => 'application/json' }, json: () => Promise.resolve({ result: { mocked: 'response' } }) })
+
+    const formData = new FormData()
+    formData.append('image', testPic)
 
     const postBinary = createPostBinaryConnector(fetch, 'https://test.com', 'image', (params) => `/v1/something/${params.somethingId}/else/`)
 
@@ -41,6 +42,9 @@ describe('postBinary', () => {
     const fetch = jest.fn()
     fetch.mockResolvedValue({ ok: true, headers: { get: () => 'application/json' }, json: () => Promise.resolve({ result: { mocked: 'response' } }) })
 
+    const formData = new FormData()
+    formData.append('image', testPic)
+
     const post = createPostBinaryConnector(fetch, 'https://test.com', 'image', params => `/v1/something/${params.somethingId}/else/`, params => ({ Authorization: 'Bearer test-token' }))
 
     const response = await post({ somethingId: 3 }, testPic)
@@ -60,6 +64,9 @@ describe('postBinary', () => {
   test('text response', async () => {
     const fetch = jest.fn()
     fetch.mockResolvedValue({ ok: true, headers: { get: () => 'text/html' }, text: () => Promise.resolve('text response') })
+
+    const formData = new FormData()
+    formData.append('image', testPic)
 
     const post = createPostBinaryConnector(fetch, 'https://test.com', 'image', params => `/v1/something/${params.somethingId}/else/`, params => ({ Authorization: 'Bearer test-token' }))
 
