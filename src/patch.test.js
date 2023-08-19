@@ -1,10 +1,10 @@
-import { jest } from '@jest/globals'
+import { test, expect, describe, vi } from 'vitest'
 
 import { createPatchConnector } from './index.js'
 
 describe('patch', () => {
   test('without extra headers', async () => {
-    const fetch = jest.fn()
+    const fetch = vi.fn()
     fetch.mockResolvedValue({ ok: true, headers: { get: () => 'application/json' }, json: () => Promise.resolve({ result: { mocked: 'response' } }) })
 
     const patch = createPatchConnector(fetch, 'https://test.com', (params) => `/v1/something/${params.somethingId}/else/`)
@@ -33,7 +33,7 @@ describe('patch', () => {
   })
 
   test('cors error', async () => {
-    const fetch = jest.fn(() => { throw new Error('fetch error') })
+    const fetch = vi.fn(() => { throw new Error('fetch error') })
 
     const patch = createPatchConnector(fetch, 'https://test.com', (params) => `/v1/something/${params.somethingId}/else/`)
 
@@ -41,7 +41,7 @@ describe('patch', () => {
   })
 
   test('with extra headers', async () => {
-    const fetch = jest.fn()
+    const fetch = vi.fn()
     fetch.mockResolvedValue({ ok: true, headers: { get: () => 'application/json' }, json: () => Promise.resolve({ result: { mocked: 'response' } }) })
 
     const patch = createPatchConnector(fetch, 'https://test.com', params => `/v1/something/${params.somethingId}/else/`, params => ({ Authorization: 'Bearer test-token' }))
@@ -76,7 +76,7 @@ describe('patch', () => {
   })
 
   test('text response', async () => {
-    const fetch = jest.fn()
+    const fetch = vi.fn()
     fetch.mockResolvedValue({ ok: true, headers: { get: () => 'text/html' }, text: () => Promise.resolve('text response') })
 
     const patch = createPatchConnector(fetch, 'https://test.com', params => `/v1/something/${params.somethingId}/else/`, params => ({ Authorization: 'Bearer test-token' }))

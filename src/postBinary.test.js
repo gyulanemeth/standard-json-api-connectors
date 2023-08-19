@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals'
+import { test, expect, describe, vi } from 'vitest'
 
 import { createPostBinaryConnector } from './index.js'
 import path from 'path'
@@ -10,7 +10,7 @@ const testPic = fs.readFileSync(path.join(__dirname, '..', 'testPics', 'test.png
 
 describe('postBinary', () => {
   test('without extra headers', async () => {
-    const fetch = jest.fn()
+    const fetch = vi.fn()
     fetch.mockResolvedValue({ ok: true, headers: { get: () => 'application/json' }, json: () => Promise.resolve({ result: { mocked: 'response' } }) })
 
     const formData = new FormData()
@@ -31,7 +31,7 @@ describe('postBinary', () => {
   })
 
   test('cors error', async () => {
-    const fetch = jest.fn(() => { throw new Error('fetch error') })
+    const fetch = vi.fn(() => { throw new Error('fetch error') })
 
     const postBinary = createPostBinaryConnector(fetch, 'https://test.com', 'image', (params) => `/v1/something/${params.somethingId}/else/`)
 
@@ -39,7 +39,7 @@ describe('postBinary', () => {
   })
 
   test('with extra headers', async () => {
-    const fetch = jest.fn()
+    const fetch = vi.fn()
     fetch.mockResolvedValue({ ok: true, headers: { get: () => 'application/json' }, json: () => Promise.resolve({ result: { mocked: 'response' } }) })
 
     const formData = new FormData()
@@ -62,7 +62,7 @@ describe('postBinary', () => {
   })
 
   test('text response', async () => {
-    const fetch = jest.fn()
+    const fetch = vi.fn()
     fetch.mockResolvedValue({ ok: true, headers: { get: () => 'text/html' }, text: () => Promise.resolve('text response') })
 
     const formData = new FormData()
