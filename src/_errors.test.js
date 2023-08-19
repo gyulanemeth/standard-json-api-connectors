@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals'
+import { test, expect, describe, beforeAll, vi } from 'vitest'
 
 import {
   createGetConnector,
@@ -68,7 +68,7 @@ describe('errors', () => {
   describe('by name - json response', () => {
     let fetch
     beforeAll(() => {
-      fetch = jest.fn()
+      fetch = vi.fn()
       fetch.mockResolvedValue({
         ok: false,
         headers: { get: () => 'application/json' },
@@ -116,7 +116,7 @@ describe('errors', () => {
   describe('by status - json response with error message', () => {
     let fetch
     beforeAll(() => {
-      fetch = jest.fn()
+      fetch = vi.fn()
       fetch.mockResolvedValue({
         ok: false,
         status: 500,
@@ -164,7 +164,7 @@ describe('errors', () => {
   describe('by status - json response without error message', () => {
     let fetch
     beforeAll(() => {
-      fetch = jest.fn()
+      fetch = vi.fn()
       fetch.mockResolvedValue({
         ok: false,
         status: 500,
@@ -212,7 +212,7 @@ describe('errors', () => {
   describe('by status - json response, unknown status', () => {
     let fetch
     beforeAll(() => {
-      fetch = jest.fn()
+      fetch = vi.fn()
       fetch.mockResolvedValue({
         ok: false,
         status: 418,
@@ -256,7 +256,7 @@ describe('errors', () => {
   describe('by status - text response, known status', () => {
     let fetch
     beforeAll(() => {
-      fetch = jest.fn()
+      fetch = vi.fn()
       fetch.mockResolvedValue({
         ok: false,
         status: 500,
@@ -300,7 +300,7 @@ describe('errors', () => {
   describe('by status - text response, unknown status', () => {
     let fetch
     beforeAll(() => {
-      fetch = jest.fn()
+      fetch = vi.fn()
       fetch.mockResolvedValue({
         ok: false,
         status: 418,

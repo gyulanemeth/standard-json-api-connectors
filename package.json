@@ -7,27 +7,7 @@
   "scripts": {
     "lint": "npx standard",
     "lint-fix": "npx standard --fix",
-    "test": "npm run lint && node --experimental-vm-modules node_modules/jest/bin/jest.js --collect-coverage",
-    "test-brk": "node --inspect-brk --experimental-vm-modules node_modules/jest/bin/jest.js"
-  },
-  "standard": {
-    "env": [
-      "jest"
-    ]
-  },
-  "jest": {
-    "testEnvironment": "jest-environment-node",
-    "transform": {},
-    "verbose": true,
-    "testTimeout": 5000,
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-      }
-    }
+    "test": "vitest --coverage -- --check-coverage --lines 100 --functions 100 --branches 100 --statements 100 --environment jsdom"
   },
   "repository": {
     "type": "git",
@@ -53,8 +33,9 @@
     "standard-api-errors": "^1.1.0"
   },
   "devDependencies": {
-    "jest": "^28.1.0",
-    "standard": "^17.0.0"
+    "@vitest/coverage-v8": "^0.34.2",
+    "standard": "^17.0.0",
+    "vitest": "^0.34.2"
   },
   "author": "GYN",
   "license": "MIT"
