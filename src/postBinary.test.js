@@ -9,6 +9,16 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const testPic = fs.readFileSync(path.join(__dirname, '..', 'testPics', 'test.png'))
 
 describe('postBinary', () => {
+  global.FormData = class FormData {
+    constructor () {
+      this.entries = []
+    }
+
+    append (key, value) {
+      this.entries.push([key, value])
+    }
+  }
+
   test('without extra headers', async () => {
     const fetch = vi.fn()
     fetch.mockResolvedValue({ ok: true, headers: { get: () => 'application/json' }, json: () => Promise.resolve({ result: { mocked: 'response' } }) })
