@@ -93,4 +93,27 @@ describe('postBinary', () => {
     ])
     expect(response).toEqual('text response')
   })
+
+  test('with signal', async () => {
+    const fetch = vi.fn((url, options) => {
+      return new Promise((resolve, reject) => {
+        if (options.signal.aborted) {
+          reject(new Error('Aborted'))
+        } else {
+          setTimeout(() => resolve({
+            ok: true,
+            headers: { get: () => 'text/html' },
+            text: () => Promise.resolve('text response')
+          }), 3000)
+        }
+
+        options.signal.addEventListener('abort', () => reject(new Error('Aborted')))
+      })
+    })
+
+    const formData = new FormData()
+    formData.append('image', testPic)
+    const post = createPostBinaryConnector(fetch, 'https://test.com', 'image', params => `/v1/something/${params.somethingId}/else/`, params => ({ Authorization: 'Bearer test-token' }), { signal: 100 })
+    await expect(post({ somethingId: 3 }, testPic)).rejects.toThrow('Failed to fetch: CORS error. Please contact support')
+  })
 })

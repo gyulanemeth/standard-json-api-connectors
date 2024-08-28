@@ -5,17 +5,21 @@ import createResponseObject from './helpers/createResponseObject.js'
 
 import { CorsError } from 'standard-api-errors'
 
-export default (fetch, apiUrl, generateRoute, generateHeaderFields = () => ({})) => async (params, query) => {
+export default (fetch, apiUrl, generateRoute, generateHeaderFields = () => ({}), options = {}) => async (params, query) => {
   const queryString = qs.stringify(query, { encodeValuesOnly: true })
   let response
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      ...generateHeaderFields(params),
+      'Content-Type': 'application/json'
+    }
+  }
+  if (options.signal) {
+    requestOptions.signal = AbortSignal.timeout(options.signal)
+  }
   try {
-    response = await fetch(`${apiUrl}${generateRoute(params)}${queryString ? `?${queryString}` : ''}`, {
-      method: 'GET',
-      headers: {
-        ...generateHeaderFields(params),
-        'Content-Type': 'application/json'
-      }
-    })
+    response = await fetch(`${apiUrl}${generateRoute(params)}${queryString ? `?${queryString}` : ''}`, requestOptions)
   } catch (error) {
     throw new CorsError()
   }
