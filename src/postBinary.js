@@ -10,8 +10,8 @@ export default (fetch, apiUrl, fieldName, generateRoute, generateHeaderFields = 
       ...generateHeaderFields(params)
     }
   }
-  if (options.signal) {
-    requestOptions.signal = AbortSignal.timeout(options.signal)
+  if (options.timeout) {
+    requestOptions.signal = AbortSignal.timeout(options.timeout)
   }
   try {
     const formData = new FormData()

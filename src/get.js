@@ -15,8 +15,8 @@ export default (fetch, apiUrl, generateRoute, generateHeaderFields = () => ({}),
       'Content-Type': 'application/json'
     }
   }
-  if (options.signal) {
-    requestOptions.signal = AbortSignal.timeout(options.signal)
+  if (options.timeout) {
+    requestOptions.signal = AbortSignal.timeout(options.timeout)
   }
   try {
     response = await fetch(`${apiUrl}${generateRoute(params)}${queryString ? `?${queryString}` : ''}`, requestOptions)

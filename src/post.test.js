@@ -96,7 +96,7 @@ describe('post', () => {
     expect(response).toEqual('text response')
   })
 
-  test('with signal', async () => {
+  test('with timeout', async () => {
     const fetch = vi.fn((url, options) => {
       return new Promise((resolve, reject) => {
         if (options.signal.aborted) {
@@ -113,7 +113,42 @@ describe('post', () => {
       })
     })
 
-    const post = createPostConnector(fetch, 'https://test.com', params => `/v1/something/${params.somethingId}/else/`, params => ({ Authorization: 'Bearer test-token' }), { signal: 100 })
+    const post = createPostConnector(fetch, 'https://test.com', params => `/v1/something/${params.somethingId}/else/`, params => ({ Authorization: 'Bearer test-token' }), { timeout: 100 })
     await expect(post({ somethingId: 3 }, { example: 'body' })).rejects.toThrow('Failed to fetch: CORS error. Please contact support')
+  })
+
+  test('success with timeout', async () => {
+    const fetch = vi.fn((url, options) => {
+      return new Promise((resolve, reject) => {
+        if (options.signal.aborted) {
+          reject(new Error('Aborted'))
+        } else {
+          setTimeout(() => resolve({
+            ok: true,
+            headers: { get: () => 'text/html' },
+            text: () => Promise.resolve('text response')
+          }), 3000)
+        }
+
+        options.signal.addEventListener('abort', () => reject(new Error('Aborted')))
+      })
+    })
+
+    const post = createPostConnector(fetch, 'https://test.com', params => `/v1/something/${params.somethingId}/else/`, params => ({ Authorization: 'Bearer test-token' }), { timeout: 4000 })
+
+    const response = await post({ somethingId: 3 }, { example: 'body' })
+    expect(fetch.mock.lastCall).toEqual([
+      'https://test.com/v1/something/3/else/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer test-token'
+        },
+        body: JSON.stringify({ example: 'body' }),
+        signal: expect.any(AbortSignal)
+      }
+    ])
+    expect(response).toEqual('text response')
   })
 })
