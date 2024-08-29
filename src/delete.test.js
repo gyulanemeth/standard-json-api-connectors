@@ -90,4 +90,58 @@ describe('delete', () => {
     ])
     expect(response).toEqual('text response')
   })
+
+  test('with timeout', async () => {
+    const fetch = vi.fn((url, options) => {
+      return new Promise((resolve, reject) => {
+        if (options.signal.aborted) {
+          reject(new Error('Aborted'))
+        } else {
+          setTimeout(() => resolve({
+            ok: true,
+            headers: { get: () => 'text/html' },
+            text: () => Promise.resolve('text response')
+          }), 3000)
+        }
+
+        options.signal.addEventListener('abort', () => reject(new Error('Aborted')))
+      })
+    })
+    const del = createDeleteConnector(fetch, 'https://test.com', params => `/v1/something/${params.somethingId}/else/`, params => ({ Authorization: 'Bearer test-token' }), { timeout: 100 })
+
+    await expect(del({ somethingId: 3 })).rejects.toThrow('Failed to fetch: CORS error. Please contact support')
+  })
+
+  test('success with timeout', async () => {
+    const fetch = vi.fn((url, options) => {
+      return new Promise((resolve, reject) => {
+        if (options.signal.aborted) {
+          reject(new Error('Aborted'))
+        } else {
+          setTimeout(() => resolve({
+            ok: true,
+            headers: { get: () => 'text/html' },
+            text: () => Promise.resolve('text response')
+          }), 3000)
+        }
+
+        options.signal.addEventListener('abort', () => reject(new Error('Aborted')))
+      })
+    })
+    const del = createDeleteConnector(fetch, 'https://test.com', params => `/v1/something/${params.somethingId}/else/`, params => ({ Authorization: 'Bearer test-token' }), { timeout: 4000 })
+
+    const response = await del({ somethingId: 3 })
+    expect(fetch.mock.lastCall).toEqual([
+      'https://test.com/v1/something/3/else/',
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer test-token'
+        },
+        signal: expect.any(AbortSignal)
+      }
+    ])
+    expect(response).toEqual('text response')
+  })
 })
