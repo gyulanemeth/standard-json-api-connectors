@@ -1,6 +1,6 @@
 {
   "name": "standard-json-api-connectors",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Standardized HTTP JSON requests with standardized errors.",
   "type": "module",
   "main": "src/index.js",

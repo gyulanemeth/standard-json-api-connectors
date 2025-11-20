@@ -21,6 +21,7 @@ export default (fetch, apiUrl, generateRoute, generateHeaderFields = () => ({}),
   try {
     response = await fetch(`${apiUrl}${generateRoute(params)}${queryString ? `?${queryString}` : ''}`, requestOptions)
   } catch (error) {
+    console.log(error)
     throw new CorsError()
   }
   await throwOnError(response)
